@@ -1,11 +1,6 @@
 ﻿using Banking.Business.Abstract;
 using Banking.DataAccess.Abstract;
 using Banking.Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Banking.Business.Concrete
 {
@@ -23,10 +18,16 @@ namespace Banking.Business.Concrete
             await _transactionRepository.Add(transaction);  
         }
 
-        public async Task<List<Transaction>> GetAllTransactions(int accountId)
+        public async Task<List<string>> GetAllTransactions(List<int> accountIds)
         {
-            return await _transactionRepository.GetAll(t => t.SenderAccountId == accountId || t.ReceiverAccountId == accountId);
+             var list = await _transactionRepository.GetAll(t =>
+                accountIds.Contains(t.SenderAccountId) ||
+                accountIds.Contains(t.ReceiverAccountId)
+            );
+
+             return list.Select(t => t.Message).ToList();
         }
+
 
         public async Task<Transaction> GetById(int id)
         {

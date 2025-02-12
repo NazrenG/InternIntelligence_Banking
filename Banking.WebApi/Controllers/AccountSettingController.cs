@@ -1,9 +1,6 @@
 ﻿using Banking.Business.Abstract;
-using Banking.Business.Concrete;
-using Banking.Entities.Models;
 using Banking.WebApi.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -20,7 +17,7 @@ namespace Banking.WebApi.Controllers
             _userSettingService = userSettingService;
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         [HttpGet("UserSetting")]
         public async Task<IActionResult> GetUserSetting()
         {
@@ -35,9 +32,10 @@ namespace Banking.WebApi.Controllers
                 LowBalanceAlertEnabled = setting.LowBalanceAlertEnabled,
                 TwoFactorEnabled = setting.TwoFactorEnabled,
             });
-          
         }
-        [Authorize]
+
+
+        [Authorize(Roles = "User,Admin")]
         [HttpPut("UpdateSettings")]
         public async Task<IActionResult> UpdateSettings([FromBody] SettingDto updatedSettings)
         {
@@ -56,8 +54,8 @@ namespace Banking.WebApi.Controllers
             return Ok(new { Message = "Settings updated successfully" });
         }
 
-        // 🚀 İki Faktörlü Doğrulamayı Aktif/Pasif Et
-        [Authorize]
+         
+        [Authorize(Roles = "User,Admin")]
         [HttpPatch("ToggleTwoFactor")]
         public async Task<IActionResult> ToggleTwoFactor([FromQuery] bool enable)
         {
@@ -72,9 +70,8 @@ namespace Banking.WebApi.Controllers
 
             return Ok(new { Message = $"Two-factor authentication {(enable ? "enabled" : "disabled")} successfully" });
         }
-
-        // ⚡ Düşük Bakiye Uyarısını Aktif/Pasif Et
-        [Authorize]
+         
+        [Authorize(Roles = "User,Admin")]
         [HttpPatch("ToggleLowBalanceAlert")]
         public async Task<IActionResult> ToggleLowBalanceAlert([FromQuery] bool enable)
         {

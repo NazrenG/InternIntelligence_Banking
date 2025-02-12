@@ -118,18 +118,18 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    var adminUser = await userManager.FindByNameAsync("admin");
+    //var adminUser = await userManager.FindByNameAsync("admin");
 
-    if (adminUser == null)
-    {
-        var user = new User { UserName = "admin", Email = "admin@example.com" };
-        var createUser = await userManager.CreateAsync(user, "Admin123!");
+    //if (adminUser == null)
+    //{
+    //    var user = new User { UserName = "admin", Email = "admin@example.com" };
+    //    var createUser = await userManager.CreateAsync(user, "Admin123!");
 
-        if (createUser.Succeeded)
-        {
-            await userManager.AddToRoleAsync(user, "Admin");
-        }
-    }
+    //    if (createUser.Succeeded)
+    //    {
+    //        await userManager.AddToRoleAsync(user, "Admin");
+    //    }
+    //}
 }
 
 

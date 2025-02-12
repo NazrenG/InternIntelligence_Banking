@@ -45,16 +45,13 @@ namespace Banking.WebApi.Controllers
                 if (!result.Succeeded)
                 {
                     return BadRequest(new { Status = "Error", Message = "User creation failed!", Errors = result.Errors });
-                }
-
+                } 
 
                 var role = string.IsNullOrEmpty(dto.Role) || (dto.Role != "Admin" && dto.Role != "User") ? "User" : dto.Role;
-                await _userManager.AddToRoleAsync(user, role);
-                var userId = await _userService.GetLastUserId();
-                await _userSettingService.Add(new UserSetting { UserId = userId });
+                await _userManager.AddToRoleAsync(user, role); 
+                await _userSettingService.Add(new UserSetting { UserId = user.Id });
                 return Ok(new { Status = "Success", Message = "User created successfully!" });
             }
-
         }
 
         [HttpPost("Login")]

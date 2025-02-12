@@ -15,8 +15,8 @@ namespace Banking.Entities.Models
         public double? Amount { get; set; }
         public string? Message { get; set; }
         public string? Status {  get; set; } //cash or credit
-        public int? ReceiverAccountId { get; set; }    
-        public int? SenderAccountId { get; set; }    
+        public int ReceiverAccountId { get; set; }    
+        public int SenderAccountId { get; set; }    
         public virtual Account? ReceiverAccount { get; set; }
         public virtual Account? SenderAccount { get; set; }
       

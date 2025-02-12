@@ -25,7 +25,7 @@ namespace Banking.WebApi.Controllers
             _userService = userService;
         } 
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpPost("MoneyTransfer")]
         public async Task<IActionResult> PostTransferMoney([FromBody] TransactionDto dto)
         {
@@ -61,23 +61,36 @@ namespace Banking.WebApi.Controllers
             return BadRequest(new { Message = "your acount number is wrong" });
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("AllTransactions")]
         public async Task<IActionResult> GetTransaction()
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null) { return BadRequest(new { Message = "user not find" }); }
-            var user = await _userService.GetById(userId);
-            var userAccounts=await _accountService.GetAccounts(userId);
-            if (userAccounts == null) return BadRequest(new { Message = "you have not account yet" });
+            if (userId == null)
+            {
+                return BadRequest(new { Message = "User not found" });
+            }
 
-            var transactions = userAccounts.Select(async i => await _transactionService.GetAllTransactions(i.Id)).ToList();
+            var user = await _userService.GetById(userId);
+            if (user == null)
+            {
+                return BadRequest(new { Message = "User does not exist" });
+            }
+
+            var userAccounts = await _accountService.GetAccounts(userId);
+            if (userAccounts == null || !userAccounts.Any())
+            {
+                return BadRequest(new { Message = "You have no accounts yet" });
+            }
+             
+            var accountIds = userAccounts.Select(a => a.Id).ToList(); 
+            var transactions = await _transactionService.GetAllTransactions(accountIds);
 
             return Ok(transactions);
-
         }
 
-        [Authorize]
+
+        [Authorize(Roles = "Admin")]
         [HttpPut("UpdatedTransferStatus/{id}")]
         public async Task<IActionResult> UpdateAccount(int id, [FromBody] string status)
         {

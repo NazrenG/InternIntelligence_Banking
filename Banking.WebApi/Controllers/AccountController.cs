@@ -23,7 +23,7 @@ namespace Banking.WebApi.Controllers
             _userManager = userManager;
         }
 
-        [Authorize]
+        [Authorize(Roles ="User")]
         [HttpGet("UserAccounts")]
         public async Task<IActionResult> GetUserAccounts()
         {
@@ -38,7 +38,7 @@ namespace Banking.WebApi.Controllers
             return Ok(list);
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpPost("NewAccount")]
         public async Task<IActionResult> PostNewAccount([FromBody] AccountDto dto)
         {
@@ -64,7 +64,7 @@ namespace Banking.WebApi.Controllers
 
         }
 
-        [Authorize]
+        [Authorize(Roles = "User,Admin")]
         [HttpDelete("DeletedAccount/{id}")]
         public async Task<IActionResult> DeleteAccount(int id, [FromBody] PasswordDto dto)
         { 
@@ -81,7 +81,7 @@ namespace Banking.WebApi.Controllers
             return Ok(new { Message = "deleted account succesfully" });
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpPut("UpdatedAccount/{id}")]
         public async Task<IActionResult> UpdateAccount(int id, [FromBody] AccountDto dto)
         {
