@@ -2,12 +2,15 @@
 using Banking.WebApi.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using System;
 using System.Security.Claims;
 
 namespace Banking.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableRateLimiting("fixed")] 
     public class AccountSettingController : ControllerBase
     {
         private readonly IUserSettingService _userSettingService;

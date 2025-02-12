@@ -4,12 +4,14 @@ using Banking.WebApi.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 
 namespace Banking.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableRateLimiting("fixed")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
